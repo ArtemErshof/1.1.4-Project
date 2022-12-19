@@ -11,14 +11,13 @@ import org.hibernate.service.ServiceRegistry;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-
 import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
     private final static String URL = "jdbc:mysql://localhost:3306/new_schema";
     private final static String USER = "root";
-    private final static String PASSWORD = "";
+    private final static String PASSWORD = "b0gs1LLa!";
     private final static String DIALECT = "org.hibernate.dialect.MySQLDialect";
     private static Connection connection = null;
     private static SessionFactory sessionFactory = null;
@@ -31,7 +30,7 @@ public class Util {
         }
         return connection;
     }
-    public static SessionFactory getSession() {
+    public static SessionFactory getSessionFactory() {
         try {
             Properties properties = new Properties();
             properties.put(Environment.URL, URL);
