@@ -11,12 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
-    private final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS new_schema.users" +
-            " (id bigint not null auto_increment, name VARCHAR(20), " +
-            "lastname VARCHAR(25), " +
-            "age tinyint, " +
-            "PRIMARY KEY (id))";
-    private final String DROP_TABLE = "DROP TABLE IF EXISTS users";
     private final SessionFactory sessionFactory = Util.getSessionFactory();
 
     public UserDaoHibernateImpl() {
@@ -28,6 +22,11 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = sessionFactory.openSession()) {
             try {
                 session.beginTransaction();
+                String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS new_schema.users" +
+                        " (id bigint not null auto_increment, name VARCHAR(20), " +
+                        "lastname VARCHAR(25), " +
+                        "age tinyint, " +
+                        "PRIMARY KEY (id))";
                 session.createNativeQuery(CREATE_TABLE).executeUpdate();
                 session.getTransaction().commit();
 
@@ -45,6 +44,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = sessionFactory.openSession()) {
             try {
                 session.beginTransaction();
+                String DROP_TABLE = "DROP TABLE IF EXISTS users";
                 session.createNativeQuery(DROP_TABLE).executeUpdate();
                 session.getTransaction().commit();
 
