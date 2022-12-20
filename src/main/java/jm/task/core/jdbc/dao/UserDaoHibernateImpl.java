@@ -111,10 +111,10 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void cleanUsersTable() {
         try (Session session = sessionFactory.openSession()) {
-            List<User> userList = this.getAllUsers();
             try {
                 session.beginTransaction();
-                userList.forEach(session::remove);
+                String TRUNCATE_TABLE = "TRUNCATE TABLE users;";
+                session.createNativeQuery(TRUNCATE_TABLE).executeUpdate();
                 session.getTransaction().commit();
 
             } catch (HibernateException e) {
