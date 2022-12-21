@@ -6,7 +6,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +21,11 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = sessionFactory.openSession()) {
             try {
                 session.beginTransaction();
-                String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS new_schema.users" +
+                session.createNativeQuery("CREATE TABLE IF NOT EXISTS new_schema.users" +
                         " (id bigint not null auto_increment, name VARCHAR(20), " +
                         "lastname VARCHAR(25), " +
                         "age tinyint, " +
-                        "PRIMARY KEY (id))";
-                session.createNativeQuery(CREATE_TABLE).executeUpdate();
+                        "PRIMARY KEY (id))").executeUpdate();
                 session.getTransaction().commit();
 
             } catch (HibernateException e) {
@@ -44,8 +42,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = sessionFactory.openSession()) {
             try {
                 session.beginTransaction();
-                String DROP_TABLE = "DROP TABLE IF EXISTS users";
-                session.createNativeQuery(DROP_TABLE).executeUpdate();
+                session.createNativeQuery("DROP TABLE IF EXISTS users").executeUpdate();
                 session.getTransaction().commit();
 
             } catch (HibernateException e) {
@@ -96,12 +93,9 @@ public class UserDaoHibernateImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
-            CriteriaQuery<User> criteriaQuery = session.getCriteriaBuilder().createQuery(User.class);
-            criteriaQuery.select(criteriaQuery.from(User.class));
             session.beginTransaction();
-            userList = session.createQuery(criteriaQuery).getResultList();
+            userList = session.createQuery("FROM User").getResultList();
             session.getTransaction().commit();
-
         } catch (HibernateException e) {
             e.printStackTrace();
         }
@@ -113,8 +107,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = sessionFactory.openSession()) {
             try {
                 session.beginTransaction();
-                String TRUNCATE_TABLE = "TRUNCATE TABLE users;";
-                session.createNativeQuery(TRUNCATE_TABLE).executeUpdate();
+                session.createNativeQuery("TRUNCATE TABLE users").executeUpdate();
                 session.getTransaction().commit();
 
             } catch (HibernateException e) {
